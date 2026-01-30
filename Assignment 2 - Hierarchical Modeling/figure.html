@@ -1,0 +1,148 @@
+<html>
+
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+
+attribute  vec4 vPosition;
+
+uniform mat4 modelViewMatrix;
+uniform mat4 projectionMatrix;
+
+void main() 
+{
+    gl_Position = projectionMatrix * modelViewMatrix * vPosition;
+} 
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+
+precision mediump float;
+uniform vec4 color; 
+void main()
+{
+    gl_FragColor = color;
+}
+</script>
+
+<style>
+
+    #gl-canvas {
+        border: 2px solid black;
+    }
+
+    #container {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+    }
+
+    #controls {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    input[type="range"]:disabled {
+        cursor: not-allowed;
+    }
+    .slider-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+  </style>
+
+<script type="text/javascript" src="Common/webgl-utils.js"></script>
+<script type="text/javascript" src="Common/InitShaders.js"></script>
+<script type="text/javascript" src="Common/MV.js"></script>
+<script type="text/javascript" src="figure.js"></script>
+
+   
+<body>    
+
+    <div id="container">
+        <canvas id="gl-canvas" width="512" height="512">
+            Oops ... your browser doesn't support the HTML5 canvas element
+        </canvas>
+    
+        <div id="controls">
+            <div id="partSelection">
+                <label for="partDropdown">Select Part:</label>
+                <select id="partDropdown">
+                    <option value="bodyId">Body</option>
+                    <option value="upperTailId">Upper Tail</option>
+                    <option value="lowerTailId">Lower Tail</option>
+                    <option value="rightUpperLegId">Left Upper Leg</option>
+                    <option value="rightLowerLegId">Left Lower Leg</option>
+                    <option value="rightFootId">Left Foot</option>
+                    <option value="leftUpperLegId">Right Upper Leg</option>
+                    <option value="leftLowerLegId">Right Lower Leg</option>
+                    <option value="leftFootId">Right Foot</option>
+                    <option value="rightUpperWingId">Left Upper Wing</option>
+                    <option value="rightLowerWingId">Left Lower Wing</option>
+                    <option value="rightHandId">Left Hand</option>
+                    <option value="leftUpperWingId">Right Upper Wing</option>
+                    <option value="leftLowerWingId">Right Lower Wing</option>
+                    <option value="leftHandId">Right Hand</option>
+                    <option value="lowerNeck2Id">Middle Lower Neck</option>
+                    <option value="upperNeck2Id">Middle Upper Neck</option>
+                    <option value="head2Id">Middle Head</option>
+                    <option value="jaw2Id">Middle Jaw</option>
+                    <option value="lowerNeck3Id">Right Lower Neck</option>
+                    <option value="upperNeck3Id">Right Upper Neck</option>
+                    <option value="head3Id">Right Head</option>
+                    <option value="jaw3Id">Right Jaw</option>
+                    <option value="lowerNeck1Id">Left Lower Neck</option>
+                    <option value="upperNeck1Id">Left Upper Neck</option>
+                    <option value="head1Id">Left Head</option>
+                    <option value="jaw1Id">Left Jaw</option>
+                    
+                </select>
+            </div>
+            <br />
+            <div id="rotationControls">
+                <div class="slider-container">
+                    X-Axis Rotation: -180
+                    <input id="sliderX" type="range" min="-180" max="180" step="1" value="0" />
+                    180
+                    <input id="inputX" type="number" min="-180" max="180" step="1" value="0" />
+                </div>
+                <br />
+                <div class="slider-container">
+                    Y-Axis Rotation: -180
+                    <input id="sliderY" type="range" min="-180" max="180" step="1" value="0" />
+                    180
+                    <input id="inputY" type="number" min="-180" max="180" step="1" value="0" />
+                </div>
+                <br />
+                <div class="slider-container">
+                    Z-Axis Rotation: -180
+                    <input id="sliderZ" type="range" min="-180" max="180" step="1" value="0" />
+                    180
+                    <input id="inputZ" type="number" min="-180" max="180" step="1" value="0" />
+                </div>
+            </div>
+            <div>
+                <button onclick="saveFrame()">Save Posture</button>
+                <button onclick="playFrames()">Play Frames</button>
+                <button onclick="stopPlayback()">Stop Playback</button>
+                <button onclick="deleteLastFrame()">Delete Last Frame</button>
+                <button onclick="resetPosture()">Reset Posture</button>
+            </div>
+            <br>
+            <div>
+                <label>Animation Speed:</label>
+                <input type="range" min="0.1" max="5.0" step="0.1" value="1.5" onchange="setAnimationSpeed(this.value)">
+            </div>
+            <br>
+            <div>
+                <button onclick="saveFramesToJSON()">Save Frames as json file</button>
+                <button type="button" onclick="document.getElementById('loadFrames').click()">Upload Animation</button>
+                <input type="file" id="loadFrames" accept=".json" onchange="loadFramesFromJSON(event)" style="display: none;" />
+            </div>
+            <br>
+            
+        </div>
+    </div>
+    
+</body>
+</html>

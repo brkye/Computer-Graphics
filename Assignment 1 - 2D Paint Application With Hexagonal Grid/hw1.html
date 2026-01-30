@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+    <style>
+        .container {
+            display: flex; 
+            justify-content: center;
+        }
+        #gl-canvas {
+            border: 2px solid black;
+            margin-right: 20px; 
+        }
+
+        .settings {
+            margin-left: 20px; 
+            font-family: Arial, sans-serif;
+        }
+
+        .settings div {
+            margin-bottom: 15px;
+        }
+
+        input[type="range"] {
+            width: 150px;
+        }
+        #color-display {
+            background-color: red;
+            width: 30px; 
+            height: 30px; 
+            border: 2px solid black; 
+            margin-top: 10px; 
+        }
+
+        #drawLineButton {
+            margin-top: 10px;
+        }
+        div{
+            margin-top: 15px;
+        }
+    </style>
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+
+attribute vec4 vPosition;
+attribute vec4 vColor;
+uniform mat4 matrix;
+ 
+varying vec4 fColor;
+
+void
+main()
+{
+    gl_Position = matrix * vPosition;
+    fColor = vColor;
+    gl_PointSize = 10.0;
+}
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+
+precision mediump float;
+
+varying vec4 fColor;
+
+void
+main()
+{
+    gl_FragColor = fColor;
+}
+</script>
+
+<script type="text/javascript" src="Common/webgl-utils.js"></script>
+<script type="text/javascript" src="Common/initShaders.js"></script>
+<script type="text/javascript" src="Common/MV.js"></script>
+<script type="text/javascript" src="hw1.js"></script>
+
+
+<body>
+    <div class="container">
+        <canvas id="gl-canvas" width="512" height="512">>
+            Oops ... your browser doesn't support the HTML5 canvas element
+            </canvas>
+            
+       <div class="settings">
+        <strong>SETTINGS</strong>
+        <br>
+        <div>
+            <input type="radio" id="draw-mode" name="mode" checked>
+            <label for="draw-mode">Draw Brush!</label>
+            <input type="radio" id="erase-mode" name="mode">
+            <label for="erase-mode">Erase Brush!</label>
+            <input type="radio" id="line-mode" name="mode">
+            <label for="line-mode">Draw Line!</label>
+        </div>
+        
+        <div id="color-display"></div>
+
+        <label for="red-slider">Red:</label>
+        <input type="range" id="red-slider" min="0" max="255" value="255">
+        <br>
+        <label for="green-slider">Green:</label>
+        <input type="range" id="green-slider" min="0" max="255" value="0">
+        <br>
+        <label for="blue-slider">Blue:</label>
+        <input type="range" id="blue-slider" min="0" max="255" value="0">
+        <div>
+            <button id="undo-button">Undo</button>
+            <button id="redo-button">Redo</button></div>
+        <div>
+            <label>Select Layer:</label>
+            <input type="radio" name="layer" value="0" checked> Layer 1
+            <input type="radio" name="layer" value="1"> Layer 2
+            <input type="radio" name="layer" value="2"> Layer 3
+        </div>
+        <div>
+            <button id="swap1_3_button">Swap Layer 1-3</button>
+            <button id="swap1_2_button">Swap Layer 1-2</button>
+            <button id="swap2_3_button">Swap Layer 2-3</button>
+        </div>
+
+        <h3>Save/Load:</h3> 
+                <a href="" download="save.json" id="save">Save</a>
+                <input type="file" id="load"></input>
+       </div>
+
+    </div>
+    <script>
+        // update color of slider result
+        function updateColorDisplay() {
+            const red = document.getElementById('red-slider').value;
+            const green = document.getElementById('green-slider').value;
+            const blue = document.getElementById('blue-slider').value;
+
+            const colorDisplay = document.getElementById('color-display');
+            colorDisplay.style.backgroundColor = `rgb(${red}, ${green}, ${blue})`;
+        }
+
+        document.getElementById('red-slider').addEventListener('input', updateColorDisplay);
+        document.getElementById('green-slider').addEventListener('input', updateColorDisplay);
+        document.getElementById('blue-slider').addEventListener('input', updateColorDisplay);
+
+
+    </script>
+
+</body>
+</html>
+
+
+
